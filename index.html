@@ -1,59 +1,293 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>DMF</title>
-    <link rel="stylesheet" href="./css/bootstrap.css">
-    <link rel="stylesheet" href="./css/bootstrap-grid.css">
-    <link rel="stylesheet" href="./css/bootstrap-reboot.css">
-    <link rel="stylesheet" href="./css/bootstrap-utilities.css">
-    <style>
-        body{
-            background-color: #000000;
-            color: #ffffff;
-        }
-    </style>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-<div class="container-fluid">
- <!--   <div class="row justify-content-md-center align-items-center">
-        <div class="col col-md-2">
-            hello
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col align-self-start">
+        </div>
+        <div class="col align-self-center">
+            <h1 id="age">0</h1>
+        </div>
+        <div class="col align-self-end">
         </div>
     </div>
--->
-    <div class="d-flex align-items-center" style="height: 100vh;">
-        <div class="container">
-            <div class="row">
-                <div class="col align-self-start">
-                </div>
-                <div class="col align-self-center">
-                    <h1 id="age">0</h1>
-                </div>
-                <div class="col align-self-end">
+</div>
+<div class="container-fluid text-center mt-2">
+    <!-- Button trigger modal -->
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-3">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="file" id="csv_file" accept=".csv">
+                        <button class="btn btn-primary" id="reset">Reset
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div>
+    </div>
+    <div class="row justify-content-md-center mt-2" id="badges">
+        <div class="col col-lg-2">
+            <div class="card text-bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">P/L</h5>
+                    <p class="card-text" id="total_pl"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-2">
+            <div class="card text-bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Buffer days</h5>
+                    <p class="card-text" id="buffer_days"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-md-center mt-5" id="tabs">
+        <div class="col col-lg-10">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="swing-trades-tab" data-bs-toggle="pill"
+                            data-bs-target="#swing-trades" type="button" role="tab" aria-controls="swing-trades"
+                            aria-selected="true">Swing trades
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="non-swing-trades-tab" data-bs-toggle="pill"
+                            data-bs-target="#non-swing-trades" type="button" role="tab" aria-controls="non-swing-trades"
+                            aria-selected="false">Non Swing trades
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="swing-trades-tabContent">
+                <div class="tab-pane fade show active" id="swing-trades" role="tabpanel"
+                     aria-labelledby="swing-trades-tab"
+                     tabindex="0">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Symbol</th>
+                            <th scope="col">ISIN</th>
+                            <th scope="col">Buy date</th>
+                            <th scope="col">Sell date</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">P/L</th>
+                            <th scope="col">Days</th>
+                        </tr>
+                        </thead>
+                        <tbody id="swing-trades-tbody">
 
-        </h5>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="non-swing-trades" role="tabpanel" aria-labelledby="non-swing-trades-tab"
+                     tabindex="0">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Symbol</th>
+                            <th scope="col">ISIN</th>
+                            <th scope="col">Trade type</th>
+                            <th scope="col">Order date</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                        </thead>
+                        <tbody id="non-swing-trades-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="./js/bootstrap.js"></script>
-<script src="./js/bootstrap.bundle.js"></script>
-<script src="./js/bootstrap.esm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
 <script>
-    var bEpoch = 864925500000;
-    var yEpoch = 31556925221.243600;
-    var fYEpoch = yEpoch * 50;
-    var eEpoch = bEpoch + fYEpoch;
-    setInterval(function() {
-        var xElement = document.getElementById("age");
-        var now = new Date().getTime();
-        xElement.innerHTML = (eEpoch - now)/yEpoch;
-    }, 1);
+    function dmf() {
+        var bEpoch = 864925500000;
+        var yEpoch = 31556925221.243600;
+        var fYEpoch = yEpoch * 50;
+        var eEpoch = bEpoch + fYEpoch;
+        setInterval(function () {
+            var xElement = document.getElementById("age");
+            var now = new Date().getTime();
+            xElement.innerHTML = (eEpoch - now) / yEpoch;
+        }, 1);
+    }
+
+    function convert_to_json(data) {
+        const splited_data = data.split("\n")
+        const result = []
+        for (let i = 1; i < splited_data.length; i++) {
+            if (splited_data[i] === "") {
+                continue
+            }
+            const single_line = splited_data[i].split(",");
+
+            result.push({
+                symbol: single_line[0],
+                isin: single_line[1],
+                trade_date: single_line[2],
+                exchange: single_line[3],
+                segment: single_line[4],
+                series: single_line[5],
+                trade_type: single_line[6],
+                auction: single_line[7],
+                quantity: single_line[8],
+                price: single_line[9],
+                trade_id: single_line[10],
+                order_id: single_line[11],
+                order_execution_time: single_line[12]
+            });
+        }
+        return result
+    }
+
+    function scrap_data(data) {
+        const order_ids = Array.from(new Set(data.map(r => r.order_id)));
+
+        let aggregated_data = []
+        for (let i = 0; i < order_ids.length; i++) {
+            const filter_list = data.filter(r => r.order_id === order_ids[i])
+            const aggregated_transaction = filter_list[0]
+            let price = 0
+            let total_count = 0
+            let quantity = 0
+            data.filter(r => r.order_id === order_ids[i])
+                .forEach(r => {
+                    price = price + parseFloat(r.price)
+                    total_count = total_count + 1
+                    quantity = quantity + parseInt(r.quantity)
+                })
+            aggregated_transaction['price'] = price / total_count
+            // aggregated_transaction.total_count = total_count
+            aggregated_transaction['quantity'] = quantity
+            aggregated_transaction['total_price'] = quantity * aggregated_transaction['price']
+            aggregated_data.push(aggregated_transaction)
+        }
+        aggregated_data = aggregated_data.sort().reverse()
+
+        let paired_order_list = []
+        let pair_orders = []
+        let pair_total_days = 0;
+        let total_pl = 0;
+        for (let i = 0; i < aggregated_data.length; i++) {
+            if (aggregated_data[i].trade_type === "sell" && !paired_order_list.includes(aggregated_data[i].order_id)) {
+                let found_pair = false;
+                for (let j = i; j < aggregated_data.length; j++) {
+                    if (aggregated_data[i].isin === aggregated_data[j].isin && aggregated_data[j].trade_type === "buy" && aggregated_data[i].quantity === aggregated_data[j].quantity && !paired_order_list.includes(aggregated_data[j].order_id) && !found_pair) {
+                        found_pair = true;
+                        paired_order_list.push(aggregated_data[i].order_id);
+                        paired_order_list.push(aggregated_data[j].order_id);
+                        day_diff = Math.round(Math.abs((new Date(aggregated_data[i].order_execution_time)
+                            - new Date(aggregated_data[j].order_execution_time)) / (24 * 60 * 60 * 1000)));
+                        pl = aggregated_data[i].total_price - aggregated_data[j].total_price
+                        pair_total_days = pair_total_days + day_diff;
+                        total_pl = total_pl + pl
+                        pair_orders.push({
+                            symbol: aggregated_data[i].symbol,
+                            isin: aggregated_data[i].isin,
+                            buy_date: aggregated_data[j].order_execution_time,
+                            sell_date: aggregated_data[i].order_execution_time,
+                            quantity: aggregated_data[i].quantity,
+                            pl: pl.toFixed(2),
+                            day_diff: day_diff,
+                            pair: [aggregated_data[j], aggregated_data[i]]
+                        });
+                    }
+                }
+            }
+        }
+        non_pair_orders = aggregated_data.filter(r => !paired_order_list.includes(r.order_id))
+        const result = {
+            pair_orders,
+            non_pair_orders,
+            pair_total_days,
+            ahead_of_the_days: ((pair_orders.length * 7) - pair_total_days),
+            total_pl
+        }
+        return result;
+    }
+
+    function load_data(result) {
+        for (let i = 0; i < result.pair_orders.length; i++) {
+            $('#swing-trades-tbody').append(`<tr>`
+                + `<td>${i + 1}</td>`
+                + `<td>${result.pair_orders[i].symbol}</td>`
+                + `<td>${result.pair_orders[i].isin}</td>`
+                + `<td>${new Date(result.pair_orders[i].buy_date).toLocaleString()}</td>`
+                + `<td>${new Date(result.pair_orders[i].sell_date).toLocaleString()}</td>`
+                + `<td>${result.pair_orders[i].quantity}</td>`
+                + `<td>${result.pair_orders[i].pl}</td>`
+                + `<td>${result.pair_orders[i].day_diff}</td>`
+                + `</tr>`);
+        }
+        for (let i = 0; i < result.non_pair_orders.length; i++) {
+            $('#non-swing-trades-tbody').append(`<tr>`
+                + `<td>${i + 1}</td>`
+                + `<td>${result.non_pair_orders[i].symbol}</td>`
+                + `<td>${result.non_pair_orders[i].isin}</td>`
+                + `<td>${result.non_pair_orders[i].trade_type}</td>`
+                + `<td>${new Date(result.non_pair_orders[i].order_execution_time).toLocaleString()}</td>`
+                + `<td>${result.non_pair_orders[i].quantity}</td>`
+                + `<td>${result.non_pair_orders[i].total_price}</td>`
+                + `</tr>`);
+        }
+        $('#total_pl').html(result.total_pl.toFixed(2))
+        $('#buffer_days').html(result.ahead_of_the_days)
+    }
+
+    function unload_data() {
+        $('#badges').hide();
+        $('#tabs').hide();
+        $('#swing-trades-tbody').empty();
+        $('#non-swing-trades-tbody').empty();
+        $('#total_pl').empty();
+        $('#buffer_days').empty();
+    }
+
+    const fileInput = document.getElementById('csv_file')
+    const readFile = () => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            $('#badges').show();
+            $('#tabs').show();
+            const csv_data = reader.result
+            const json_data = convert_to_json(csv_data)
+            const result = scrap_data(json_data)
+            load_data(result)
+            // document.getElementById('out').innerHTML = reader.result
+        }
+        // start reading the file. When it is done, calls the onload event defined above.
+        reader.readAsBinaryString(fileInput.files[0])
+    }
+    fileInput.addEventListener('change', readFile)
+
+    $(function () {
+        dmf();
+        unload_data();
+        $('#reset').click(function () {
+            unload_data();
+        });
+    });
 </script>
 </body>
 </html>
