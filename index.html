@@ -222,9 +222,11 @@
                         found_pair = true;
                         paired_order_list.push(aggregated_data[i].order_id);
                         paired_order_list.push(aggregated_data[j].order_id);
-                        day_diff = Math.round(Math.abs((new Date(aggregated_data[i].order_execution_time)
+                        const day_diff = Math.round(Math.abs((new Date(aggregated_data[i].order_execution_time)
                             - new Date(aggregated_data[j].order_execution_time)) / (24 * 60 * 60 * 1000)));
-                        pl = aggregated_data[i].total_price - aggregated_data[j].total_price
+                        const pl = aggregated_data[i].total_price - aggregated_data[j].total_price
+                        console.log('pl :::', pl);
+                        const pl_percent = ((100 * aggregated_data[i].total_price) / aggregated_data[j].total_price) - 100
                         pair_total_days = pair_total_days + day_diff;
                         total_pl = total_pl + pl
                         pair_orders.push({
@@ -234,6 +236,7 @@
                             sell_date: aggregated_data[i].order_execution_time,
                             quantity: aggregated_data[i].quantity,
                             pl: pl.toFixed(2),
+                            pl_percent: pl_percent.toFixed(2),
                             day_diff: day_diff,
                             pair: [aggregated_data[j], aggregated_data[i]]
                         });
@@ -242,19 +245,22 @@
             }
         }
         non_pair_orders = aggregated_data.filter(r => !paired_order_list.includes(r.order_id))
-        const result = {
+        return {
             pair_orders,
             non_pair_orders,
             pair_total_days,
             ahead_of_the_days: ((pair_orders.length * 7) - pair_total_days),
             total_pl,
             aggregated_data
-        }
-        return result;
+        };
     }
 
     function load_data(result) {
         for (let i = 0; i < result.pair_orders.length; i++) {
+            const pl = result.pair_orders[i].pl
+            const pl_percent = result.pair_orders[i].pl_percent
+            const pl_str = `${pl} (${pl_percent}%)`
+            const pl_element = pl > 0 ? `<b style="color:#00ff00;">${pl_str}</b>` : `<b style="color:#ff0000;">${pl_str}</b>`
             $('#swing-trades-tbody').append(`<tr>`
                 + `<td>${i + 1}</td>`
                 + `<td>${result.pair_orders[i].symbol}</td>`
@@ -262,7 +268,7 @@
                 + `<td>${new Date(result.pair_orders[i].buy_date).toLocaleString()}</td>`
                 + `<td>${new Date(result.pair_orders[i].sell_date).toLocaleString()}</td>`
                 + `<td>${result.pair_orders[i].quantity}</td>`
-                + `<td>${result.pair_orders[i].pl}</td>`
+                + `<td>${pl_element}</td>`
                 + `<td>${result.pair_orders[i].day_diff}</td>`
                 + `</tr>`);
         }
