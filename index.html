@@ -69,6 +69,12 @@
                             aria-selected="false">Non Swing trades
                     </button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trade-transactions-tab" data-bs-toggle="pill"
+                            data-bs-target="#trade-transactions" type="button" role="tab" aria-controls="trade-transactions"
+                            aria-selected="false">Trade transaction
+                    </button>
+                </li>
             </ul>
             <div class="tab-content" id="swing-trades-tabContent">
                 <div class="tab-pane fade show active" id="swing-trades" role="tabpanel"
@@ -107,6 +113,24 @@
                         </tr>
                         </thead>
                         <tbody id="non-swing-trades-tbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="trade-transactions" role="tabpanel" aria-labelledby="trade-transactions-tab"
+                     tabindex="0">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Symbol</th>
+                            <th scope="col">ISIN</th>
+                            <th scope="col">Trade type</th>
+                            <th scope="col">Order date</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                        </thead>
+                        <tbody id="trade-transactions-tbody">
                         </tbody>
                     </table>
                 </div>
@@ -180,7 +204,6 @@
                     quantity = quantity + parseInt(r.quantity)
                 })
             aggregated_transaction['price'] = price / total_count
-            // aggregated_transaction.total_count = total_count
             aggregated_transaction['quantity'] = quantity
             aggregated_transaction['total_price'] = quantity * aggregated_transaction['price']
             aggregated_data.push(aggregated_transaction)
@@ -224,7 +247,8 @@
             non_pair_orders,
             pair_total_days,
             ahead_of_the_days: ((pair_orders.length * 7) - pair_total_days),
-            total_pl
+            total_pl,
+            aggregated_data
         }
         return result;
     }
@@ -253,6 +277,18 @@
                 + `<td>${result.non_pair_orders[i].total_price}</td>`
                 + `</tr>`);
         }
+        for (let i = 0; i < result.aggregated_data.length; i++) {
+            $('#trade-transactions-tbody').append(`<tr>`
+                + `<td>${i + 1}</td>`
+                + `<td>${result.aggregated_data[i].symbol}</td>`
+                + `<td>${result.aggregated_data[i].isin}</td>`
+                + `<td>${result.aggregated_data[i].trade_type}</td>`
+                + `<td>${new Date(result.aggregated_data[i].order_execution_time).toLocaleString()}</td>`
+                + `<td>${result.aggregated_data[i].quantity}</td>`
+                + `<td>${result.aggregated_data[i].total_price}</td>`
+                + `</tr>`);
+        }
+
         $('#total_pl').html(result.total_pl.toFixed(2))
         $('#buffer_days').html(result.ahead_of_the_days)
     }
@@ -262,6 +298,7 @@
         $('#tabs').hide();
         $('#swing-trades-tbody').empty();
         $('#non-swing-trades-tbody').empty();
+        $('#trade-transactions-tbody').empty();
         $('#total_pl').empty();
         $('#buffer_days').empty();
     }
@@ -276,9 +313,7 @@
             const json_data = convert_to_json(csv_data)
             const result = scrap_data(json_data)
             load_data(result)
-            // document.getElementById('out').innerHTML = reader.result
         }
-        // start reading the file. When it is done, calls the onload event defined above.
         reader.readAsBinaryString(fileInput.files[0])
     }
     fileInput.addEventListener('change', readFile)
