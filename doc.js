@@ -1,9 +1,9 @@
-const bucket_price = 10416.66;
-const total_window_week = 48*10;
+const bucket_price = 30000;
+const total_window_week = 48*3;
 const week_for_add_window = 4;
-const initial_bucket = 1;
-const min =0.0;
-const max =3.0;
+const initial_bucket = 5;
+const min =5.0;
+const max =5.0;
 const iteration = 10000;
 
 function generateRandomNumber() {
@@ -17,6 +17,10 @@ function test() {
         list.push(result)
     }
     const avg = list.reduce((p, c) => p + c, 0) / list.length;
+    let invested_amount = bucket_price * (initial_bucket + (total_window_week/week_for_add_window))
+    console.log('invested_amount :::::', invested_amount);
+    console.log('avg :::::', avg);
+    console.log(`Profit: ${((avg/invested_amount) -1)*100 }%`)
 }
 
 function compute() {
